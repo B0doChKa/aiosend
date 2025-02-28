@@ -2,7 +2,8 @@ import asyncio
 from aiogram import Bot, Dispatcher
 from aiogram.filters import Command
 from config import BOT_TOKEN
-from handlers import cmd_start, show_catalog, add_to_cart_handler, show_cart, checkout, clear_cart_handler, handle_payment
+from handlers import cmd_start, show_catalog, add_to_cart_handler, show_cart, checkout, clear_cart_handler
+from aiogram import F
 from database import init_db, add_products
 
 # Инициализация бота и диспетчера
@@ -23,10 +24,7 @@ add_products()
 
 # Запуск бота
 async def main() -> None:
-    await asyncio.gather(
-        dp.start_polling(bot),
-        handle_payment(),  # Запуск отслеживания платежей
-    )
+    await dp.start_polling(bot)
 
 if __name__ == "__main__":
     asyncio.run(main())
