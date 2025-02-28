@@ -1,6 +1,10 @@
-# Конфигурация бота
-BOT_TOKEN = "YOUR_BOT_TOKEN"
-CRYPTO_PAY_TOKEN = "YOUR_CRYPTO_PAY_TOKEN"
+import os
+from dotenv import load_dotenv
 
-# Настройки базы данных (если используется SQLite)
-DATABASE_NAME = "shop_bot.db"
+# Загрузка переменных из .env
+load_dotenv()
+
+# Конфигурация
+BOT_TOKEN = os.getenv("BOT_TOKEN")
+CRYPTO_PAY_TOKEN = os.getenv("CRYPTO_PAY_TOKEN")
+DATABASE_NAME = os.getenv("DATABASE_NAME")
