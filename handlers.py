@@ -2,6 +2,7 @@ from aiogram import F
 from aiogram.types import Message, CallbackQuery
 from aiogram.filters import Command
 from aiosend import CryptoPay
+import asyncio
 from aiosend.types import Invoice
 from config import CRYPTO_PAY_TOKEN
 from database import get_products, add_to_cart, get_cart, clear_cart
@@ -57,7 +58,8 @@ async def checkout(callback: CallbackQuery) -> None:
             f"Заказ создан на сумму ${total:.2f}\n\nДля оплаты нажмите кнопку ниже.",
             reply_markup=payment_keyboard(invoice.mini_app_invoice_url)
         )
-        invoice.poll(message=callback.message)
+        # Запуск проверки статуса оплаты
+        await check_payment_status(invoice.invoice_id, callback.message)
     except Exception as e:
         await callback.message.answer(f"Ошибка при создании платежа: {str(e)}")
 
@@ -67,12 +69,16 @@ async def clear_cart_handler(callback: CallbackQuery) -> None:
     clear_cart(user_id)
     await callback.message.answer("Корзина очищена.")
 
-# Обработчик успешной оплаты
-@cp.invoice_polling()
-async def handle_payment(invoice: Invoice, message: Message) -> None:
-    if invoice.status == "paid":
-        await message.answer(f"✅ Оплата получена: {invoice.amount} {invoice.asset}")
-        # Очистка корзины после оплаты
-        clear_cart(message.from_user.id)
-    else:
-        await message.answer("❌ Оплата не прошла. Попробуйте еще раз.")
+# Функция для проверки статуса оплаты
+async def check_payment_status(invoice_id: str, message: Message) -> None:
+    while True:
+        await asyncio.sleep(5)  # Проверяем статус каждые 5 секунд
+        invoice = await cp.get_invoice(invoice_id)
+        if invoice.status == "paid":
+            await message.answer(f"✅ Оплата получена: {invoice.amount} {invoice.asset}")
+            # Очистка корзины после оплаты
+            clear_cart(message.from_user.id)
+            break
+        elif invoice.status in ["expired", "cancelled"]:
+            await message.answer("❌ Оплата не прошла. Попробуйте еще раз.")
+            break
