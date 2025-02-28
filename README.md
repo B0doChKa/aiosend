@@ -26,7 +26,7 @@
 ### Установка зависимостей
 1. Клонируйте репозиторий:
    ```bash
-   git clone https://github.com/ваш-репозиторий.git
+   git clone https://github.com/B0doChKa/aiosend
    cd ваш-репозиторий
    ```
 2. Установите зависимости:
