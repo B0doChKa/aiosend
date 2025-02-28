@@ -3,6 +3,7 @@ from aiogram.types import Message, CallbackQuery
 from aiogram.filters import Command
 from aiosend import CryptoPay
 from aiosend.types import Invoice
+import asyncio
 from config import CRYPTO_PAY_TOKEN
 from database import get_products, add_to_cart, get_cart, clear_cart
 from keyboards import main_menu_keyboard, catalog_keyboard, cart_keyboard, payment_keyboard
