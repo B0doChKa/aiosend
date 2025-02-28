@@ -31,32 +31,34 @@
    ```
 2. Установите зависимости:
    ```bash
-   pip install aiogram aiosend sqlite3
+   pip install aiogram aiosend python-dotenv sqlite3
    ```
 
 ---
 
 ## Структура проекта
 
-- **`config.py`** — содержит конфигурацию (токены, настройки базы данных).
+- **`.env`** — содержит конфиденциальные данные (токены, настройки).
+- **`config.py`** — загружает переменные из `.env`.
 - **`database.py`** — отвечает за работу с базой данных (SQLite).
 - **`keyboards.py`** — содержит клавиатуры для бота.
-- **`main.py`** — основной файл с логикой бота.
+- **`handlers.py`** — содержит хендлеры для обработки команд и callback-запросов.
+- **`bot.py`** — основной файл для запуска бота.
 
 ---
 
 ## Запуск бота
 
-1. Замените значения в `config.py` на свои:
-   ```python
-   BOT_TOKEN = "YOUR_BOT_TOKEN"
-   CRYPTO_PAY_TOKEN = "YOUR_CRYPTO_PAY_TOKEN"
-   DATABASE_NAME = "shop_bot.db"
+1. Создайте файл `.env` и добавьте в него следующие переменные:
+   ```plaintext
+   BOT_TOKEN=YOUR_BOT_TOKEN
+   CRYPTO_PAY_TOKEN=YOUR_CRYPTO_PAY_TOKEN
+   DATABASE_NAME=shop_bot.db
    ```
 
 2. Запустите бота:
    ```bash
-   python main.py
+   python bot.py
    ```
 
 ---
@@ -104,7 +106,7 @@
 
 ## Конфигурация
 
-### Файл `config.py`
+### Файл `.env`
 - **`BOT_TOKEN`** — токен вашего Telegram-бота.
 - **`CRYPTO_PAY_TOKEN`** — токен для работы с криптоплатежами.
 - **`DATABASE_NAME`** — имя файла базы данных (по умолчанию `shop_bot.db`).
