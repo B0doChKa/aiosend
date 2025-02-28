@@ -15,13 +15,14 @@
    ```
 
 3. **Настройка токенов:**
+   - Перейдите в config.py
    - Замените `YOUR_BOT_TOKEN` на токен вашего бота, полученный от [BotFather](https://core.telegram.org/bots#botfather).
    - Замените `YOUR_CRYPTO_PAY_TOKEN` на токен вашего сервиса криптоплатежей (например, CryptoBot или другой).
 
 4. **Запуск бота:**
    Запустите бота с помощью команды:
    ```bash
-   python bot.py
+   python main.py
    ```
 
 ## Описание кода
