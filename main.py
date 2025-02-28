@@ -2,8 +2,7 @@ import asyncio
 from aiogram import Bot, Dispatcher
 from aiogram.filters import Command
 from config import BOT_TOKEN
-from handlers import cmd_start, show_catalog, add_to_cart_handler, show_cart, checkout, clear_cart_handler
-from aiogram import F
+from handlers import cmd_start, show_catalog, add_to_cart_handler, show_cart, checkout, clear_cart_handler, back_to_menu
 from database import init_db, add_products
 
 # Инициализация бота и диспетчера
@@ -17,6 +16,7 @@ dp.callback_query.register(add_to_cart_handler, F.data.startswith("product_"))
 dp.callback_query.register(show_cart, F.data == "cart")
 dp.callback_query.register(checkout, F.data == "checkout")
 dp.callback_query.register(clear_cart_handler, F.data == "clear_cart")
+dp.callback_query.register(back_to_menu, F.data == "back_to_menu")  # Обработчик кнопки "Назад"
 
 # Инициализация базы данных
 init_db()
