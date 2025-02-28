@@ -2,8 +2,8 @@ from aiogram import F
 from aiogram.types import Message, CallbackQuery
 from aiogram.filters import Command
 from aiosend import CryptoPay
-from aiosend.types import Invoice
 import asyncio
+from aiosend.types import Invoice
 from config import CRYPTO_PAY_TOKEN
 from database import get_products, add_to_cart, get_cart, clear_cart
 from keyboards import main_menu_keyboard, catalog_keyboard, cart_keyboard, payment_keyboard
@@ -74,6 +74,11 @@ async def back_to_menu(callback: CallbackQuery) -> None:
     await callback.message.edit_text("👋 Добро пожаловать в магазин!", reply_markup=main_menu_keyboard())
     await callback.answer()
 
+# Обработчик кнопки "Отменить"
+async def cancel_payment(callback: CallbackQuery) -> None:
+    await callback.message.edit_text("❌ Оплата отменена.", reply_markup=main_menu_keyboard())
+    await callback.answer()
+
 # Функция для проверки статуса оплаты
 async def check_payment_status(invoice_id: str, message: Message) -> None:
     while True:
@@ -85,5 +90,5 @@ async def check_payment_status(invoice_id: str, message: Message) -> None:
             clear_cart(message.from_user.id)
             break
         elif invoice.status in ["expired", "cancelled"]:
-            await message.edit_text("❌ Оплата не прошла. Попробуйте еще раз.")
+            await message.edit_text("❌ Оплата не прошла. Попробуйте еще раз.", reply_markup=main_menu_keyboard())
             break
