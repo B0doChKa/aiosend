@@ -17,7 +17,7 @@ async def cmd_start(message: Message) -> None:
 # Обработчик каталога
 async def show_catalog(callback: CallbackQuery) -> None:
     products = get_products()
-    await callback.message.answer("Выберите товар:", reply_markup=catalog_keyboard(products))
+    await callback.message.edit_text("Выберите товар:", reply_markup=catalog_keyboard(products))
     await callback.answer()
 
 # Обработчик добавления товара в корзину
@@ -25,14 +25,14 @@ async def add_to_cart_handler(callback: CallbackQuery) -> None:
     user_id = callback.from_user.id
     product_id = int(callback.data.split("_")[1])
     add_to_cart(user_id, product_id)
-    await callback.answer("Товар добавлен в корзину!")
+    await callback.message.edit_text("Товар добавлен в корзину!")
 
 # Обработчик корзины
 async def show_cart(callback: CallbackQuery) -> None:
     user_id = callback.from_user.id
     cart_items = get_cart(user_id)
     if not cart_items:
-        await callback.message.answer("Ваша корзина пуста.")
+        await callback.message.edit_text("Ваша корзина пуста.")
         return
 
     total = sum(item[2] * item[3] for item in cart_items)
@@ -40,7 +40,7 @@ async def show_cart(callback: CallbackQuery) -> None:
     cart_text += "\n".join(f"{item[1]} x{item[3]} = ${item[2] * item[3]:.2f}" for item in cart_items)
     cart_text += f"\n\n💵 Итого: ${total:.2f}"
 
-    await callback.message.answer(cart_text, reply_markup=cart_keyboard())
+    await callback.message.edit_text(cart_text, reply_markup=cart_keyboard())
     await callback.answer()
 
 # Обработчик оплаты
@@ -67,7 +67,7 @@ async def checkout(callback: CallbackQuery) -> None:
 async def clear_cart_handler(callback: CallbackQuery) -> None:
     user_id = callback.from_user.id
     clear_cart(user_id)
-    await callback.message.answer("Корзина очищена.")
+    await callback.message.edit_text("Корзина очищена.")
 
 # Функция для проверки статуса оплаты
 async def check_payment_status(invoice_id: str, message: Message) -> None:
@@ -75,10 +75,10 @@ async def check_payment_status(invoice_id: str, message: Message) -> None:
         await asyncio.sleep(5)  # Проверяем статус каждые 5 секунд
         invoice = await cp.get_invoice(invoice_id)
         if invoice.status == "paid":
-            await message.answer(f"✅ Оплата получена: {invoice.amount} {invoice.asset}")
+            await message.edit_text(f"✅ Оплата получена: {invoice.amount} {invoice.asset}")
             # Очистка корзины после оплаты
             clear_cart(message.from_user.id)
             break
         elif invoice.status in ["expired", "cancelled"]:
-            await message.answer("❌ Оплата не прошла. Попробуйте еще раз.")
+            await message.edit_text("❌ Оплата не прошла. Попробуйте еще раз.")
             break
