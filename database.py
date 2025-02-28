@@ -25,8 +25,8 @@ def init_db() -> None:
 # Добавление товаров в базу данных
 def add_products() -> None:
     products = [
-        (1, "Футболка", 10.99),
-        (2, "Кепка", 7.99),
+        (1, "Футболка", 0.01),
+        (2, "Кепка", 0.01),
     ]
     with sqlite3.connect(DATABASE_NAME) as conn:
         cursor = conn.cursor()
