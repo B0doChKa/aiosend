@@ -5,7 +5,6 @@ from config import DATABASE_NAME
 def init_db() -> None:
     with sqlite3.connect(DATABASE_NAME) as conn:
         cursor = conn.cursor()
-        # Создаем таблицу для товаров
         cursor.execute("""
             CREATE TABLE IF NOT EXISTS products (
                 id INTEGER PRIMARY KEY,
@@ -13,7 +12,6 @@ def init_db() -> None:
                 price REAL NOT NULL
             )
         """)
-        # Создаем таблицу для корзин пользователей
         cursor.execute("""
             CREATE TABLE IF NOT EXISTS carts (
                 user_id INTEGER,
